@@ -15,25 +15,58 @@
 
             </div>
 
-            <div class="nav-item">
+            <div class="nav-item dropdown">
 
-                <div class="d-flex align-items-center">
+                <a
+                    href="#"
+                    class="nav-link d-flex lh-1 text-reset p-0"
+                    data-bs-toggle="dropdown"
+                    aria-label="Abrir menú de usuario">
 
                     <span class="avatar avatar-sm me-2">
-                        AD
+                        {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
                     </span>
 
                     <div class="d-none d-xl-block">
 
                         <div>
-                            Administrador
+                            {{ auth()->user()->name }}
                         </div>
 
                         <div class="mt-1 small text-secondary">
-                            SuperAdmin
+                            {{ auth()->user()->email }}
                         </div>
 
                     </div>
+
+                    <i class="ti ti-chevron-down ms-2"></i>
+
+                </a>
+
+                <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+
+                    <a
+                        href="{{ route('password.edit') }}"
+                        class="dropdown-item">
+                        <i class="ti ti-lock me-2"></i>
+                        Cambiar contraseña
+                    </a>
+
+                    <div class="dropdown-divider"></div>
+
+                    <form
+                        action="{{ route('logout') }}"
+                        method="POST">
+                        @csrf
+
+                        <button
+                            type="submit"
+                            class="dropdown-item text-danger">
+                            <i class="ti ti-logout me-2"></i>
+                            Cerrar sesión
+                        </button>
+
+                    </form>
 
                 </div>
 
