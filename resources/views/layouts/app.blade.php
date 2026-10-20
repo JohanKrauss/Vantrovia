@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es">
+<html lang="es" data-bs-theme="light">
 
 <head>
     <meta charset="utf-8">
@@ -10,9 +10,16 @@
         @yield('title', 'Vantrovia')
     </title>
 
+    <script>
+        (() => {
+            const theme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-bs-theme', theme);
+        })();
+    </script>
+
     @vite([
-        'resources/css/app.css',
-        'resources/js/app.js'
+    'resources/css/app.css',
+    'resources/js/app.js'
     ])
 </head>
 
@@ -34,9 +41,9 @@
                         <div class="col">
 
                             @hasSection('pretitle')
-                                <div class="page-pretitle">
-                                    @yield('pretitle')
-                                </div>
+                            <div class="page-pretitle">
+                                @yield('pretitle')
+                            </div>
                             @endif
 
                             <h2 class="page-title">

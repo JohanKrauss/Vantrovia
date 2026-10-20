@@ -6,12 +6,16 @@
 
             <div class="nav-item me-3">
 
-                <a
-                    href="#"
-                    class="nav-link px-0"
-                    title="Cambiar tema">
-                    <i class="ti ti-moon fs-2"></i>
-                </a>
+                <button
+                    type="button"
+                    class="btn btn-link nav-link px-0"
+                    id="themeToggle"
+                    title="Cambiar tema"
+                    aria-label="Cambiar tema">
+                    <i
+                        id="themeIcon"
+                        class="ti ti-moon fs-2"></i>
+                </button>
 
             </div>
 

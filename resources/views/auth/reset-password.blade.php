@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es">
+<html lang="es" data-bs-theme="light">
 
 <head>
     <meta charset="utf-8">
@@ -9,6 +9,19 @@
         content="width=device-width, initial-scale=1, viewport-fit=cover">
 
     <title>Nueva contraseña | Vantrovia</title>
+
+    <script>
+        (() => {
+            const savedTheme = localStorage.getItem('theme');
+
+            const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ?
+                'dark' :
+                'light';
+
+            const theme = savedTheme || systemTheme;
+            document.documentElement.setAttribute('data-bs-theme', theme);
+        })();
+    </script>
 
     @vite([
     'resources/css/app.css',
