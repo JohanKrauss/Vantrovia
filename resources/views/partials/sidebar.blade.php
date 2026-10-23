@@ -45,7 +45,61 @@
                             Dashboard
                         </span>
 
+                <li class="nav-item">
+
+                    <a
+                        class="nav-link {{ request()->routeIs('businesses.*') ? 'active' : '' }}"
+                        href="{{ route('businesses.index') }}">
+
+                        <span class="nav-link-icon">
+                            <i class="ti ti-building-store"></i>
+                        </span>
+
+                        <span class="nav-link-title">
+                            Negocios
+                        </span>
+
                     </a>
+
+                </li>
+
+                <li class="nav-item">
+
+                    <a
+                        class="nav-link {{ request()->routeIs('branches.*') ? 'active' : '' }}"
+                        href="{{ route('branches.index') }}">
+
+                        <span class="nav-link-icon">
+                            <i class="ti ti-building-store"></i>
+                        </span>
+
+                        <span class="nav-link-title">
+                            Sucursales
+                        </span>
+
+                    </a>
+
+                </li>
+
+                <li class="nav-item">
+
+                    <a
+                        class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}"
+                        href="{{ route('users.index') }}">
+
+                        <span class="nav-link-icon">
+                            <i class="ti ti-users"></i>
+                        </span>
+
+                        <span class="nav-link-title">
+                            Usuarios
+                        </span>
+
+                    </a>
+
+                </li>
+
+                </a>
 
                 </li>
 

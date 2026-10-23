@@ -29,7 +29,7 @@ Dashboard
                 </div>
 
                 <div class="h1 mb-0 mt-2">
-                    0
+                    {{ $businessCount }}
                 </div>
 
                 <div class="text-secondary mt-2">
@@ -53,7 +53,7 @@ Dashboard
                 </div>
 
                 <div class="h1 mb-0 mt-2">
-                    0
+                    {{ $userCount }}
                 </div>
 
                 <div class="text-secondary mt-2">
@@ -77,7 +77,7 @@ Dashboard
                 </div>
 
                 <div class="h1 mb-0 mt-2">
-                    0
+                    {{ $branchCount }}
                 </div>
 
                 <div class="text-secondary mt-2">
@@ -101,7 +101,7 @@ Dashboard
                 </div>
 
                 <div class="h1 mb-0 mt-2">
-                    0
+                    {{ $activeBusinessCount }}
                 </div>
 
                 <div class="text-secondary mt-2">
