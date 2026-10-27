@@ -249,6 +249,13 @@ Negocios
                                     Usuarios
                                 </a>
 
+                                <a
+                                    href="{{ route('businesses.roles.index', $business) }}"
+                                    class="dropdown-item">
+                                    <i class="ti ti-shield-lock me-2"></i>
+                                    Roles y permisos
+                                </a>
+
 
                                 @if($business->status !== 'active')
 

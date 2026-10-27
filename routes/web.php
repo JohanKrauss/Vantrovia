@@ -11,6 +11,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\BusinessUserController;
+use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -160,4 +161,39 @@ Route::middleware('auth')->group(function () {
         '/businesses/{business}/users/{user}/status',
         [BusinessUserController::class, 'updateStatus']
     )->name('businesses.users.status');
+
+    Route::get(
+        '/businesses/{business}/roles',
+        [RoleController::class, 'index']
+    )->name('businesses.roles.index');
+
+    Route::get(
+        '/businesses/{business}/roles/create',
+        [RoleController::class, 'create']
+    )->name('businesses.roles.create');
+
+    Route::post(
+        '/businesses/{business}/roles',
+        [RoleController::class, 'store']
+    )->name('businesses.roles.store');
+
+    Route::get(
+        '/businesses/{business}/roles/{role}/edit',
+        [RoleController::class, 'edit']
+    )->name('businesses.roles.edit');
+
+    Route::put(
+        '/businesses/{business}/roles/{role}',
+        [RoleController::class, 'update']
+    )->name('businesses.roles.update');
+
+    Route::delete(
+        '/businesses/{business}/roles/{role}',
+        [RoleController::class, 'destroy']
+    )->name('businesses.roles.destroy');
+
+    Route::patch(
+        '/businesses/{business}/users/{user}/role',
+        [BusinessUserController::class, 'updateRole']
+    )->name('businesses.users.role');
 });

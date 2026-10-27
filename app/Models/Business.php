@@ -29,8 +29,14 @@ class Business extends Model
         return $this->belongsToMany(User::class)
             ->withPivot([
                 'id',
+                'role_id',
                 'is_active',
             ])
             ->withTimestamps();
+    }
+
+    public function roles(): HasMany
+    {
+        return $this->hasMany(Role::class);
     }
 }

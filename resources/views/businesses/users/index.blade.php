@@ -26,11 +26,9 @@ Usuarios del negocio
 @section('content')
 
 @if(session('success'))
-
 <div
     class="alert alert-success alert-dismissible auto-dismiss-alert"
     role="alert">
-
     <div>
         <i class="ti ti-circle-check me-2"></i>
         {{ session('success') }}
@@ -39,19 +37,16 @@ Usuarios del negocio
     <button
         type="button"
         class="btn-close"
-        data-bs-dismiss="alert"></button>
-
+        data-bs-dismiss="alert"
+        aria-label="Cerrar"></button>
 </div>
-
 @endif
 
 
 @if(session('warning'))
-
 <div
     class="alert alert-warning alert-dismissible auto-dismiss-alert"
     role="alert">
-
     <div>
         <i class="ti ti-alert-triangle me-2"></i>
         {{ session('warning') }}
@@ -60,43 +55,39 @@ Usuarios del negocio
     <button
         type="button"
         class="btn-close"
-        data-bs-dismiss="alert"></button>
-
+        data-bs-dismiss="alert"
+        aria-label="Cerrar"></button>
 </div>
-
 @endif
 
 
 <div class="row row-cards">
 
+    {{-- Asignar usuario --}}
     <div class="col-lg-4">
 
         <div class="card">
 
             <div class="card-header">
-
                 <h3 class="card-title">
                     Asignar usuario
                 </h3>
-
             </div>
 
 
             <form
                 action="{{ route('businesses.users.store', $business) }}"
                 method="POST">
-
                 @csrf
-
 
                 <div class="card-body">
 
+                    {{-- Usuario --}}
                     <div class="mb-3">
 
                         <label class="form-label">
                             Usuario
                         </label>
-
 
                         <select
                             name="user_id"
@@ -107,7 +98,6 @@ Usuarios del negocio
                                 Selecciona un usuario
                             </option>
 
-
                             @foreach($availableUsers as $user)
 
                             <option
@@ -115,27 +105,60 @@ Usuarios del negocio
                                 @selected(old('user_id')==$user->id)
                                 @disabled(!$user->is_active)
                                 >
-
                                 {{ $user->name }}
                                 — {{ $user->email }}
 
                                 @if(!$user->is_active)
                                 (Desactivado)
                                 @endif
-
                             </option>
 
                             @endforeach
 
                         </select>
 
-
                         @error('user_id')
-
                         <div class="invalid-feedback">
                             {{ $message }}
                         </div>
+                        @enderror
 
+                    </div>
+
+
+                    {{-- Rol --}}
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Rol
+                        </label>
+
+                        <select
+                            name="role_id"
+                            class="form-select @error('role_id') is-invalid @enderror"
+                            required>
+
+                            <option value="">
+                                Selecciona un rol
+                            </option>
+
+                            @foreach($roles as $role)
+
+                            <option
+                                value="{{ $role->id }}"
+                                @selected(old('role_id')==$role->id)
+                                >
+                                {{ $role->name }}
+                            </option>
+
+                            @endforeach
+
+                        </select>
+
+                        @error('role_id')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
                         @enderror
 
                     </div>
@@ -144,10 +167,15 @@ Usuarios del negocio
                     @if($availableUsers->isEmpty())
 
                     <div class="text-secondary small">
-
                         Todos los usuarios registrados ya están
                         relacionados con este negocio.
+                    </div>
 
+                    @elseif($roles->isEmpty())
+
+                    <div class="text-warning small">
+                        Este negocio no tiene roles disponibles.
+                        Crea un rol antes de asignar usuarios.
                     </div>
 
                     @endif
@@ -160,13 +188,13 @@ Usuarios del negocio
                     <button
                         type="submit"
                         class="btn btn-primary w-100"
-                        @disabled($availableUsers->isEmpty())
+                        @disabled(
+                        $availableUsers->isEmpty() ||
+                        $roles->isEmpty()
+                        )
                         >
-
                         <i class="ti ti-user-plus me-2"></i>
-
                         Asignar usuario
-
                     </button>
 
                 </div>
@@ -176,6 +204,7 @@ Usuarios del negocio
         </div>
 
 
+        {{-- Información del negocio --}}
         <div class="card mt-3">
 
             <div class="card-body">
@@ -199,6 +228,7 @@ Usuarios del negocio
     </div>
 
 
+    {{-- Usuarios asignados --}}
     <div class="col-lg-8">
 
         <div class="card">
@@ -226,16 +256,15 @@ Usuarios del negocio
                 <table class="table table-vcenter card-table">
 
                     <thead>
-
                         <tr>
                             <th>Usuario</th>
                             <th>Correo</th>
+                            <th>Rol</th>
                             <th>Estado</th>
                             <th class="w-1">
                                 Acciones
                             </th>
                         </tr>
-
                     </thead>
 
 
@@ -245,22 +274,14 @@ Usuarios del negocio
 
                         <tr>
 
+                            {{-- Usuario --}}
                             <td>
 
                                 <div class="d-flex align-items-center">
 
                                     <span class="avatar avatar-sm me-3">
-
-                                        {{ strtoupper(
-                                            substr(
-                                                $user->name,
-                                                0,
-                                                2
-                                            )
-                                        ) }}
-
+                                        {{ strtoupper(substr($user->name, 0, 2)) }}
                                     </span>
-
 
                                     <div>
 
@@ -283,11 +304,71 @@ Usuarios del negocio
                             </td>
 
 
+                            {{-- Correo --}}
                             <td>
                                 {{ $user->email }}
                             </td>
 
 
+                            {{-- Rol --}}
+                            <td>
+
+                                <form
+                                    action="{{ route(
+                                        'businesses.users.role',
+                                        [
+                                            $business,
+                                            $user
+                                        ]
+                                    ) }}"
+                                    method="POST"
+                                    class="d-flex gap-2">
+
+                                    @csrf
+                                    @method('PATCH')
+
+                                    <select
+                                        name="role_id"
+                                        class="form-select form-select-sm"
+                                        required>
+
+                                        @if(!$user->pivot->role_id)
+
+                                        <option value="" selected disabled>
+                                            Sin rol
+                                        </option>
+
+                                        @endif
+
+                                        @foreach($roles as $role)
+
+                                        <option
+                                            value="{{ $role->id }}"
+                                            @selected(
+                                            $user->pivot->role_id == $role->id
+                                            )
+                                            >
+                                            {{ $role->name }}
+                                        </option>
+
+                                        @endforeach
+
+                                    </select>
+
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-sm btn-outline-primary"
+                                        title="Guardar rol">
+                                        <i class="ti ti-check"></i>
+                                    </button>
+
+                                </form>
+
+                            </td>
+
+
+                            {{-- Estado --}}
                             <td>
 
                                 @if($user->pivot->is_active)
@@ -307,6 +388,7 @@ Usuarios del negocio
                             </td>
 
 
+                            {{-- Acciones --}}
                             <td>
 
                                 <div
@@ -315,7 +397,9 @@ Usuarios del negocio
                                     <button
                                         type="button"
                                         class="btn btn-icon"
-                                        data-bs-toggle="dropdown">
+                                        data-bs-toggle="dropdown"
+                                        aria-expanded="false"
+                                        aria-label="Acciones">
                                         <i class="ti ti-dots-vertical"></i>
                                     </button>
 
@@ -382,7 +466,7 @@ Usuarios del negocio
                         <tr>
 
                             <td
-                                colspan="4"
+                                colspan="5"
                                 class="text-center text-secondary py-5">
 
                                 <i class="ti ti-users-minus fs-1 d-block mb-2"></i>

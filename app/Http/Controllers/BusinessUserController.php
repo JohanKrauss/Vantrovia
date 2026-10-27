@@ -34,11 +34,18 @@ class BusinessUserController extends Controller
                 'is_active',
             ]);
 
+        $roles = $business
+            ->roles()
+            ->orderByDesc('is_system')
+            ->orderBy('name')
+            ->get();
+
         return view(
             'businesses.users.index',
             compact(
                 'business',
-                'availableUsers'
+                'availableUsers',
+                'roles'
             )
         );
     }
@@ -52,11 +59,29 @@ class BusinessUserController extends Controller
                 'required',
                 'exists:users,id',
             ],
+
+            'role_id' => [
+                'required',
+                'exists:roles,id',
+            ],
         ]);
 
         $user = User::findOrFail(
             $data['user_id']
         );
+
+        $role = $business
+            ->roles()
+            ->find($data['role_id']);
+
+        if (! $role) {
+            return back()
+                ->withErrors([
+                    'role_id' =>
+                    'El rol seleccionado no pertenece a este negocio.',
+                ])
+                ->withInput();
+        }
 
         $alreadyAssigned = $business
             ->users()
@@ -76,6 +101,7 @@ class BusinessUserController extends Controller
         $business->users()->attach(
             $user->id,
             [
+                'role_id' => $role->id,
                 'is_active' => true,
             ]
         );
@@ -125,6 +151,57 @@ class BusinessUserController extends Controller
             $data['is_active']
                 ? 'Usuario activado en el negocio.'
                 : 'Usuario desactivado del negocio.'
+        );
+    }
+
+    public function updateRole(
+        Request $request,
+        Business $business,
+        User $user
+    ) {
+        $data = $request->validate([
+            'role_id' => [
+                'required',
+                'exists:roles,id',
+            ],
+        ]);
+
+        $role = $business
+            ->roles()
+            ->find($data['role_id']);
+
+        if (! $role) {
+            return back()->with(
+                'warning',
+                'Ese rol no pertenece al negocio.'
+            );
+        }
+
+        $membershipExists = $business
+            ->users()
+            ->where(
+                'users.id',
+                $user->id
+            )
+            ->exists();
+
+        if (! $membershipExists) {
+            return back()->with(
+                'warning',
+                'El usuario no pertenece a este negocio.'
+            );
+        }
+
+        $business->users()->updateExistingPivot(
+            $user->id,
+            [
+                'role_id' => $role->id,
+            ]
+        );
+
+        return back()->with(
+            'success',
+            'Rol actualizado correctamente.'
         );
     }
 }

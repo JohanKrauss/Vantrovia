@@ -45,6 +45,7 @@ class User extends Authenticatable
         return $this->belongsToMany(Business::class)
             ->withPivot([
                 'id',
+                'role_id',
                 'is_active',
             ])
             ->withTimestamps();
