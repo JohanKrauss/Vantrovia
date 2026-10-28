@@ -13,12 +13,25 @@ Roles y permisos
 
 @section('page-actions')
 
+@section('page-actions')
+
+@if(
+auth()->user()->hasBusinessPermission(
+$business,
+'roles.create'
+)
+)
+
 <a
     href="{{ route('businesses.roles.create', $business) }}"
     class="btn btn-primary">
     <i class="ti ti-plus me-2"></i>
     Nuevo rol
 </a>
+
+@endif
+
+@endsection
 
 @endsection
 
@@ -143,6 +156,13 @@ Roles y permisos
 
                             <div class="dropdown-menu dropdown-menu-end">
 
+                                @if(
+                                auth()->user()->hasBusinessPermission(
+                                $business,
+                                'roles.update'
+                                )
+                                )
+
                                 <a
                                     href="{{ route(
                                         'businesses.roles.edit',
@@ -156,21 +176,28 @@ Roles y permisos
                                     Editar
                                 </a>
 
+                                @endif
 
-                                @if(!$role->is_system)
+
+                                @if(
+                                !$role->is_system &&
+                                auth()->user()->hasBusinessPermission(
+                                $business,
+                                'roles.delete'
+                                )
+                                )
 
                                 <div class="dropdown-divider"></div>
 
                                 <form
                                     action="{{ route(
-                                            'businesses.roles.destroy',
-                                            [
-                                                $business,
-                                                $role
-                                            ]
-                                        ) }}"
-                                    method="POST"
-                                    onsubmit="return confirm('¿Eliminar este rol?')">
+                                        'businesses.roles.destroy',
+                                        [
+                                            $business,
+                                            $role
+                                        ]
+                                    ) }}"
+                                    method="POST">
 
                                     @csrf
                                     @method('DELETE')

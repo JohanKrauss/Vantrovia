@@ -10,7 +10,7 @@ class SuperAdminSeeder extends Seeder
 {
     public function run(): void
     {
-        User::updateOrCreate(
+        $user = User::updateOrCreate(
             [
                 'email' => 'admin@vantrovia.local',
             ],
@@ -20,5 +20,9 @@ class SuperAdminSeeder extends Seeder
                 'is_active' => true,
             ]
         );
+
+        $user->forceFill([
+            'is_platform_admin' => true,
+        ])->save();
     }
 }

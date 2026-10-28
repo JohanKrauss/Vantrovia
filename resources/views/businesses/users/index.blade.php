@@ -313,14 +313,21 @@ Usuarios del negocio
                             {{-- Rol --}}
                             <td>
 
+                                @if(
+                                auth()->user()->hasBusinessPermission(
+                                $business,
+                                'roles.assign'
+                                )
+                                )
+
                                 <form
                                     action="{{ route(
-                                        'businesses.users.role',
-                                        [
-                                            $business,
-                                            $user
-                                        ]
-                                    ) }}"
+            'businesses.users.role',
+            [
+                $business,
+                $user
+            ]
+        ) }}"
                                     method="POST"
                                     class="d-flex gap-2">
 
@@ -334,7 +341,10 @@ Usuarios del negocio
 
                                         @if(!$user->pivot->role_id)
 
-                                        <option value="" selected disabled>
+                                        <option
+                                            value=""
+                                            selected
+                                            disabled>
                                             Sin rol
                                         </option>
 
@@ -355,15 +365,27 @@ Usuarios del negocio
 
                                     </select>
 
-
                                     <button
-                                        type="submit"
-                                        class="btn btn-sm btn-outline-primary"
-                                        title="Guardar rol">
+                                        class="btn btn-sm btn-outline-primary">
                                         <i class="ti ti-check"></i>
                                     </button>
 
                                 </form>
+
+                                @else
+
+                                @php
+                                $currentRole = $roles->firstWhere(
+                                'id',
+                                $user->pivot->role_id
+                                );
+                                @endphp
+
+                                <span class="badge bg-blue-lt">
+                                    {{ $currentRole?->name ?? 'Sin rol' }}
+                                </span>
+
+                                @endif
 
                             </td>
 

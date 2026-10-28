@@ -100,100 +100,154 @@ Route::middleware('auth')->group(function () {
         LoginController::class,
         'logout'
     ])->name('logout');
+    /*
+---------------USUARIOS-----------------
+*/
+    Route::middleware('platform.admin')->group(function () {
 
-    Route::resource('users', UserController::class)
-        ->except(['show', 'destroy']);
+        Route::resource(
+            'users',
+            UserController::class
+        )->except([
+            'show',
+            'destroy',
+        ]);
 
-    Route::patch(
-        '/users/{user}/toggle-status',
-        [UserController::class, 'toggleStatus']
-    )->name('users.toggle-status');
+        Route::patch(
+            '/users/{user}/toggle-status',
+            [UserController::class, 'toggleStatus']
+        )->name('users.toggle-status');
 
-    Route::post(
-        '/users/{user}/password-reset',
-        [UserController::class, 'sendPasswordReset']
-    )
-        ->middleware('throttle:3,1')
-        ->name('users.password-reset');
+        Route::post(
+            '/users/{user}/password-reset',
+            [UserController::class, 'sendPasswordReset']
+        )
+            ->middleware('throttle:3,1')
+            ->name('users.password-reset');
 
-    Route::resource(
-        'businesses',
-        BusinessController::class
-    )->except([
-        'show',
-        'destroy',
-    ]);
+        Route::resource(
+            'businesses',
+            BusinessController::class
+        )->except([
+            'show',
+            'destroy',
+        ]);
 
-    Route::patch(
-        '/businesses/{business}/status',
-        [BusinessController::class, 'updateStatus']
-    )->name('businesses.status');
+        Route::patch(
+            '/businesses/{business}/status',
+            [BusinessController::class, 'updateStatus']
+        )->name('businesses.status');
 
-    Route::resource(
-        'branches',
-        BranchController::class
-    )->except([
-        'show',
-        'destroy',
-    ]);
+        Route::resource(
+            'branches',
+            BranchController::class
+        )->except([
+            'show',
+            'destroy',
+        ]);
 
-    Route::patch(
-        '/branches/{branch}/status',
-        [BranchController::class, 'updateStatus']
-    )->name('branches.status');
+        Route::patch(
+            '/branches/{branch}/status',
+            [BranchController::class, 'updateStatus']
+        )->name('branches.status');
 
-    Route::patch(
-        '/branches/{branch}/make-main',
-        [BranchController::class, 'makeMain']
-    )->name('branches.make-main');
-
+        Route::patch(
+            '/branches/{branch}/make-main',
+            [BranchController::class, 'makeMain']
+        )->name('branches.make-main');
+    });
+    /*
+-----------------USUARIOS DEL NEGOCIO-----------------
+*/
     Route::get(
         '/businesses/{business}/users',
         [BusinessUserController::class, 'index']
-    )->name('businesses.users.index');
+    )
+        ->middleware(
+            'business.permission:users.view'
+        )
+        ->name('businesses.users.index');
 
     Route::post(
         '/businesses/{business}/users',
         [BusinessUserController::class, 'store']
-    )->name('businesses.users.store');
+    )
+        ->middleware('platform.admin')
+        ->name('businesses.users.store');
 
     Route::patch(
         '/businesses/{business}/users/{user}/status',
         [BusinessUserController::class, 'updateStatus']
-    )->name('businesses.users.status');
-
-    Route::get(
-        '/businesses/{business}/roles',
-        [RoleController::class, 'index']
-    )->name('businesses.roles.index');
-
-    Route::get(
-        '/businesses/{business}/roles/create',
-        [RoleController::class, 'create']
-    )->name('businesses.roles.create');
-
-    Route::post(
-        '/businesses/{business}/roles',
-        [RoleController::class, 'store']
-    )->name('businesses.roles.store');
-
-    Route::get(
-        '/businesses/{business}/roles/{role}/edit',
-        [RoleController::class, 'edit']
-    )->name('businesses.roles.edit');
-
-    Route::put(
-        '/businesses/{business}/roles/{role}',
-        [RoleController::class, 'update']
-    )->name('businesses.roles.update');
-
-    Route::delete(
-        '/businesses/{business}/roles/{role}',
-        [RoleController::class, 'destroy']
-    )->name('businesses.roles.destroy');
+    )
+        ->middleware(
+            'business.permission:users.status'
+        )
+        ->name('businesses.users.status');
 
     Route::patch(
         '/businesses/{business}/users/{user}/role',
         [BusinessUserController::class, 'updateRole']
-    )->name('businesses.users.role');
+    )
+        ->middleware(
+            'business.permission:roles.assign'
+        )
+        ->name('businesses.users.role');
+    /*
+-------------------ROLES-------------------
+*/
+    Route::get(
+        '/businesses/{business}/roles',
+        [RoleController::class, 'index']
+    )
+        ->middleware(
+            'business.permission:roles.view'
+        )
+        ->name('businesses.roles.index');
+
+    Route::get(
+        '/businesses/{business}/roles/create',
+        [RoleController::class, 'create']
+    )
+        ->middleware(
+            'business.permission:roles.create'
+        )
+        ->name('businesses.roles.create');
+
+
+    Route::post(
+        '/businesses/{business}/roles',
+        [RoleController::class, 'store']
+    )
+        ->middleware(
+            'business.permission:roles.create'
+        )
+        ->name('businesses.roles.store');
+
+    Route::get(
+        '/businesses/{business}/roles/{role}/edit',
+        [RoleController::class, 'edit']
+    )
+        ->middleware(
+            'business.permission:roles.update'
+        )
+        ->name('businesses.roles.edit');
+
+
+    Route::put(
+        '/businesses/{business}/roles/{role}',
+        [RoleController::class, 'update']
+    )
+        ->middleware(
+            'business.permission:roles.update'
+        )
+        ->name('businesses.roles.update');
+
+    Route::delete(
+        '/businesses/{business}/roles/{role}',
+        [RoleController::class, 'destroy']
+    )
+        ->middleware(
+            'business.permission:roles.delete'
+        )
+        ->name('businesses.roles.destroy');
 });
