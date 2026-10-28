@@ -13,6 +13,14 @@ class PermissionSeeder extends Seeder
     {
         $permissions = [
 
+            // Dashboard
+            [
+                'module' => 'dashboard',
+                'name' => 'Ver dashboard',
+                'slug' => 'dashboard.view',
+                'description' => 'Puede acceder al dashboard del negocio.',
+            ],
+
             // Usuarios
             [
                 'module' => 'users',

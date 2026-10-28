@@ -9,6 +9,7 @@ $editing
 );
 
 $moduleLabels = [
+'dashboard' => 'Dashboard',
 'users' => 'Usuarios',
 'branches' => 'Sucursales',
 'roles' => 'Roles y permisos',

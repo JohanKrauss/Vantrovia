@@ -4,15 +4,44 @@ $currentUser = auth()->user();
 
 $currentBusiness = null;
 
+
 if (
 $currentUser &&
-! $currentUser->isPlatformAdmin()
+! $currentUser->isPlatformAdmin() &&
+session()->has('current_business_id')
 ) {
+
 $currentBusiness = $currentUser
 ->businesses()
 ->wherePivot('is_active', true)
-->where('businesses.status', 'active')
+->where(
+'businesses.status',
+'active'
+)
+->where(
+'businesses.id',
+session('current_business_id')
+)
 ->first();
+
+}
+
+
+if ($currentUser?->isPlatformAdmin()) {
+
+$homeUrl = route('dashboard');
+
+} elseif($currentBusiness) {
+
+$homeUrl = route(
+'business.dashboard',
+$currentBusiness
+);
+
+} else {
+
+$homeUrl = route('business.select');
+
 }
 
 @endphp
@@ -37,7 +66,7 @@ $currentBusiness = $currentUser
         <h1 class="navbar-brand navbar-brand-autodark">
 
             <a
-                href="{{ route('dashboard') }}"
+                href="{{ $homeUrl }}"
                 class="text-decoration-none">
                 <span class="fs-3 fw-bold">
                     Vantrovia
@@ -53,21 +82,20 @@ $currentBusiness = $currentUser
 
             <ul class="navbar-nav pt-lg-3">
 
-                {{-- ========================================== --}}
-                {{-- ADMINISTRADOR DE PLATAFORMA                --}}
-                {{-- ========================================== --}}
+                {{-- ================================================== --}}
+                {{-- ADMINISTRACIÓN DE VANTROVIA                       --}}
+                {{-- ================================================== --}}
 
                 @if(
                 $currentUser &&
                 $currentUser->isPlatformAdmin()
                 )
 
-                {{-- Dashboard --}}
                 <li class="nav-item">
 
                     <a
-                        class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
-                        href="{{ route('dashboard') }}">
+                        href="{{ route('dashboard') }}"
+                        class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
 
                         <span class="nav-link-icon">
                             <i class="ti ti-home"></i>
@@ -82,12 +110,11 @@ $currentBusiness = $currentUser
                 </li>
 
 
-                {{-- Negocios --}}
                 <li class="nav-item">
 
                     <a
-                        class="nav-link {{ request()->routeIs('businesses.index') ? 'active' : '' }}"
-                        href="{{ route('businesses.index') }}">
+                        href="{{ route('businesses.index') }}"
+                        class="nav-link {{ request()->routeIs('businesses.index') ? 'active' : '' }}">
 
                         <span class="nav-link-icon">
                             <i class="ti ti-building-store"></i>
@@ -102,12 +129,11 @@ $currentBusiness = $currentUser
                 </li>
 
 
-                {{-- Sucursales --}}
                 <li class="nav-item">
 
                     <a
-                        class="nav-link {{ request()->routeIs('branches.*') ? 'active' : '' }}"
-                        href="{{ route('branches.index') }}">
+                        href="{{ route('branches.index') }}"
+                        class="nav-link {{ request()->routeIs('branches.*') ? 'active' : '' }}">
 
                         <span class="nav-link-icon">
                             <i class="ti ti-building"></i>
@@ -122,12 +148,11 @@ $currentBusiness = $currentUser
                 </li>
 
 
-                {{-- Usuarios --}}
                 <li class="nav-item">
 
                     <a
-                        class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}"
-                        href="{{ route('users.index') }}">
+                        href="{{ route('users.index') }}"
+                        class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
 
                         <span class="nav-link-icon">
                             <i class="ti ti-users"></i>
@@ -142,14 +167,14 @@ $currentBusiness = $currentUser
                 </li>
 
 
-                {{-- ========================================== --}}
-                {{-- USUARIO DE NEGOCIO                         --}}
-                {{-- ========================================== --}}
+                {{-- ================================================== --}}
+                {{-- NEGOCIO ACTIVO                                    --}}
+                {{-- ================================================== --}}
 
                 @elseif($currentBusiness)
 
-                {{-- Nombre del negocio --}}
-                <li class="nav-item mt-2 mb-2">
+                {{-- Negocio --}}
+                <li class="nav-item mb-2">
 
                     <div class="nav-link disabled">
 
@@ -170,7 +195,39 @@ $currentBusiness = $currentUser
                 </li>
 
 
-                {{-- Usuarios del negocio --}}
+                {{-- Dashboard --}}
+                @if(
+                $currentUser->hasBusinessPermission(
+                $currentBusiness,
+                'dashboard.view'
+                )
+                )
+
+                <li class="nav-item">
+
+                    <a
+                        href="{{ route(
+                                    'business.dashboard',
+                                    $currentBusiness
+                                ) }}"
+                        class="nav-link {{ request()->routeIs('business.dashboard') ? 'active' : '' }}">
+
+                        <span class="nav-link-icon">
+                            <i class="ti ti-home"></i>
+                        </span>
+
+                        <span class="nav-link-title">
+                            Dashboard
+                        </span>
+
+                    </a>
+
+                </li>
+
+                @endif
+
+
+                {{-- Usuarios --}}
                 @if(
                 $currentUser->hasBusinessPermission(
                 $currentBusiness,
@@ -181,11 +238,11 @@ $currentBusiness = $currentUser
                 <li class="nav-item">
 
                     <a
-                        class="nav-link {{ request()->routeIs('businesses.users.*') ? 'active' : '' }}"
                         href="{{ route(
                                     'businesses.users.index',
                                     $currentBusiness
-                                ) }}">
+                                ) }}"
+                        class="nav-link {{ request()->routeIs('businesses.users.*') ? 'active' : '' }}">
 
                         <span class="nav-link-icon">
                             <i class="ti ti-users"></i>
@@ -202,7 +259,7 @@ $currentBusiness = $currentUser
                 @endif
 
 
-                {{-- Roles y permisos --}}
+                {{-- Roles --}}
                 @if(
                 $currentUser->hasBusinessPermission(
                 $currentBusiness,
@@ -213,11 +270,11 @@ $currentBusiness = $currentUser
                 <li class="nav-item">
 
                     <a
-                        class="nav-link {{ request()->routeIs('businesses.roles.*') ? 'active' : '' }}"
                         href="{{ route(
                                     'businesses.roles.index',
                                     $currentBusiness
-                                ) }}">
+                                ) }}"
+                        class="nav-link {{ request()->routeIs('businesses.roles.*') ? 'active' : '' }}">
 
                         <span class="nav-link-icon">
                             <i class="ti ti-shield-lock"></i>
@@ -234,25 +291,47 @@ $currentBusiness = $currentUser
                 @endif
 
 
-                {{-- ========================================== --}}
-                {{-- SIN NEGOCIO                                --}}
-                {{-- ========================================== --}}
+                {{-- Cambiar negocio --}}
+                <li class="nav-item mt-3">
+
+                    <a
+                        href="{{ route('business.select') }}"
+                        class="nav-link">
+
+                        <span class="nav-link-icon">
+                            <i class="ti ti-switch-horizontal"></i>
+                        </span>
+
+                        <span class="nav-link-title">
+                            Cambiar negocio
+                        </span>
+
+                    </a>
+
+                </li>
+
+
+                {{-- ================================================== --}}
+                {{-- SIN NEGOCIO ACTIVO                                --}}
+                {{-- ================================================== --}}
 
                 @elseif($currentUser)
 
                 <li class="nav-item">
 
-                    <div class="nav-link disabled">
+                    <a
+                        href="{{ route('business.select') }}"
+                        class="nav-link">
 
                         <span class="nav-link-icon">
-                            <i class="ti ti-alert-circle"></i>
+                            <i class="ti ti-building-store"></i>
                         </span>
 
                         <span class="nav-link-title">
-                            Sin negocio asignado
+                            Seleccionar negocio
                         </span>
 
-                    </div>
+                    </a>
 
                 </li>
 

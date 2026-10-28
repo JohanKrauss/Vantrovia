@@ -12,6 +12,8 @@ use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\BusinessUserController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\BusinessContextController;
+use App\Http\Controllers\BusinessDashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -250,4 +252,28 @@ Route::middleware('auth')->group(function () {
             'business.permission:roles.delete'
         )
         ->name('businesses.roles.destroy');
+
+    /*
+-------------------NEGOCIO-------------------
+*/
+    Route::get(
+        '/business/select',
+        [BusinessContextController::class, 'index']
+    )->name('business.select');
+
+
+    Route::post(
+        '/business/select',
+        [BusinessContextController::class, 'switch']
+    )->name('business.switch');
+
+
+    Route::get(
+        '/businesses/{business}/dashboard',
+        [BusinessDashboardController::class, 'index']
+    )
+        ->middleware(
+            'business.permission:dashboard.view'
+        )
+        ->name('business.dashboard');
 });

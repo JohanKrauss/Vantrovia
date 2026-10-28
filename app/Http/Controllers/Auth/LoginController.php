@@ -50,7 +50,51 @@ class LoginController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard'));
+        $user = $request->user();
+
+
+        if ($user->isPlatformAdmin()) {
+
+            $request->session()->forget(
+                'current_business_id'
+            );
+
+            return redirect()->route(
+                'dashboard'
+            );
+        }
+
+
+        $businesses = $user
+            ->businesses()
+            ->wherePivot('is_active', true)
+            ->where('businesses.status', 'active')
+            ->get();
+
+
+        if ($businesses->count() === 1) {
+
+            $business = $businesses->first();
+
+            $request->session()->put(
+                'current_business_id',
+                $business->id
+            );
+
+            return redirect()->route(
+                'business.dashboard',
+                $business
+            );
+        }
+
+
+        $request->session()->forget(
+            'current_business_id'
+        );
+
+        return redirect()->route(
+            'business.select'
+        );
     }
 
     public function logout(Request $request)
