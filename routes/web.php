@@ -15,6 +15,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\BusinessContextController;
 use App\Http\Controllers\BusinessDashboardController;
 use App\Http\Controllers\BusinessBranchController;
+use App\Http\Controllers\BusinessSettingsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -346,4 +347,23 @@ Route::middleware('auth')->group(function () {
             'business.permission:branches.update'
         )
         ->name('businesses.branches.make-main');
+
+    Route::get(
+        '/businesses/{business}/settings',
+        [BusinessSettingsController::class, 'edit']
+    )
+        ->middleware(
+            'business.permission:business.view'
+        )
+        ->name('businesses.settings.edit');
+
+
+    Route::put(
+        '/businesses/{business}/settings',
+        [BusinessSettingsController::class, 'update']
+    )
+        ->middleware(
+            'business.permission:business.update'
+        )
+        ->name('businesses.settings.update');
 });
