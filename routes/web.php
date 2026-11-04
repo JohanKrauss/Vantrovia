@@ -14,6 +14,7 @@ use App\Http\Controllers\BusinessUserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\BusinessContextController;
 use App\Http\Controllers\BusinessDashboardController;
+use App\Http\Controllers\BusinessBranchController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -276,4 +277,73 @@ Route::middleware('auth')->group(function () {
             'business.permission:dashboard.view'
         )
         ->name('business.dashboard');
+
+    Route::get(
+        '/businesses/{business}/branches',
+        [BusinessBranchController::class, 'index']
+    )
+        ->middleware(
+            'business.permission:branches.view'
+        )
+        ->name('businesses.branches.index');
+
+
+    Route::get(
+        '/businesses/{business}/branches/create',
+        [BusinessBranchController::class, 'create']
+    )
+        ->middleware(
+            'business.permission:branches.create'
+        )
+        ->name('businesses.branches.create');
+
+
+    Route::post(
+        '/businesses/{business}/branches',
+        [BusinessBranchController::class, 'store']
+    )
+        ->middleware(
+            'business.permission:branches.create'
+        )
+        ->name('businesses.branches.store');
+
+
+    Route::get(
+        '/businesses/{business}/branches/{branch}/edit',
+        [BusinessBranchController::class, 'edit']
+    )
+        ->middleware(
+            'business.permission:branches.update'
+        )
+        ->name('businesses.branches.edit');
+
+
+    Route::put(
+        '/businesses/{business}/branches/{branch}',
+        [BusinessBranchController::class, 'update']
+    )
+        ->middleware(
+            'business.permission:branches.update'
+        )
+        ->name('businesses.branches.update');
+
+
+    Route::patch(
+        '/businesses/{business}/branches/{branch}/status',
+        [BusinessBranchController::class, 'updateStatus']
+    )
+        ->middleware(
+            'business.permission:branches.status'
+        )
+        ->name('businesses.branches.status');
+
+
+    Route::patch(
+        '/businesses/{business}/branches/{branch}/make-main',
+        [BusinessBranchController::class, 'makeMain']
+    )
+        ->middleware(
+            'business.permission:branches.update'
+        )
+        ->name('businesses.branches.make-main');
 });

@@ -226,6 +226,37 @@ $homeUrl = route('business.select');
 
                 @endif
 
+                {{-- Sucursales --}}
+                @if(
+                $currentUser->hasBusinessPermission(
+                $currentBusiness,
+                'branches.view'
+                )
+                )
+
+                <li class="nav-item">
+
+                    <a
+                        href="{{ route(
+                            'businesses.branches.index',
+                            $currentBusiness
+                        ) }}"
+                        class="nav-link {{ request()->routeIs('businesses.branches.*') ? 'active' : '' }}">
+
+                        <span class="nav-link-icon">
+                            <i class="ti ti-building"></i>
+                        </span>
+
+                        <span class="nav-link-title">
+                            Sucursales
+                        </span>
+
+                    </a>
+
+                </li>
+
+                @endif
+
 
                 {{-- Usuarios --}}
                 @if(
