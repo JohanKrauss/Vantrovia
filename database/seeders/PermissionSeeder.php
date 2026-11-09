@@ -46,6 +46,12 @@ class PermissionSeeder extends Seeder
                 'slug' => 'users.status',
                 'description' => 'Puede modificar el estado de usuarios.',
             ],
+            [
+                'module' => 'users',
+                'name' => 'Asignar sucursales',
+                'slug' => 'users.branches',
+                'description' => 'Puede administrar las sucursales permitidas para los usuarios.',
+            ],
 
             // Sucursales
             [
@@ -120,16 +126,18 @@ class PermissionSeeder extends Seeder
             ],
         ];
 
+        $permissionIds = collect();
+
         foreach ($permissions as $permission) {
-            Permission::updateOrCreate(
+            $model = Permission::updateOrCreate(
                 [
                     'slug' => $permission['slug'],
                 ],
                 $permission
             );
-        }
 
-        $permissionIds = Permission::pluck('id');
+            $permissionIds->push($model->id);
+        }
 
         Business::query()
             ->each(function (Business $business) use ($permissionIds) {
@@ -146,7 +154,7 @@ class PermissionSeeder extends Seeder
                 );
 
                 $role->permissions()->sync(
-                    $permissionIds
+                    $permissionIds->all()
                 );
             });
     }

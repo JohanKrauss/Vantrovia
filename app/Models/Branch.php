@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Branch extends Model
 {
@@ -33,5 +34,15 @@ class Branch extends Model
     public function business(): BelongsTo
     {
         return $this->belongsTo(Business::class);
+    }
+
+    public function businessUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            BusinessUser::class,
+            'business_user_branch',
+            'branch_id',
+            'business_user_id'
+        )->withTimestamps();
     }
 }
