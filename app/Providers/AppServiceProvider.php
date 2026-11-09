@@ -2,11 +2,13 @@
 
 namespace App\Providers;
 
+use App\Models\Business;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
+use App\Observers\BusinessObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,5 +34,7 @@ class AppServiceProvider extends ServiceProvider
             return Limit::perMinute(5)
                 ->by($email . '|' . $request->ip());
         });
+
+        Business::observe(BusinessObserver::class);
     }
 }

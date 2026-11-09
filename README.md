@@ -1,58 +1,184 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Vantrovia
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Proyecto SaaS desarrollado con Laravel, Blade, Tabler y Vite.
 
-## About Laravel
+## Requisitos
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Tener instalado:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- PHP 8.4
+- Composer
+- Node.js
+- NPM
+- Git
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Comprobar:
 
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
-```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+```powershell
+php -v
+composer --version
+node -v
+npm -v
+git --version
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+## Levantar el proyecto por primera vez
 
-## Contributing
+### 1. Clonar el repositorio
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```powershell
+cd C:\Users\TU_USUARIO\Documents
+git clone URL_DEL_REPOSITORIO
+cd Vantrovia
+```
 
-## Code of Conduct
+### 2. Instalar dependencias
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```powershell
+composer install
+npm install
+```
 
-## Security Vulnerabilities
+### 3. Crear `.env`
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```powershell
+Copy-Item .env.example .env
+php artisan key:generate
+```
 
-## License
+El archivo `.env` contiene la configuración local y no debe subirse a GitHub.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 4. Crear la base de datos
+
+Actualmente en desarrollo se utiliza SQLite.
+
+Verifica en `.env`:
+
+```env
+DB_CONNECTION=sqlite
+```
+
+Crea el archivo:
+
+```powershell
+New-Item database\database.sqlite -ItemType File -Force
+```
+
+Ejecuta migraciones y seeders:
+
+```powershell
+php artisan migrate --seed
+```
+
+### 5. Limpiar caché
+
+```powershell
+php artisan optimize:clear
+```
+
+## Ejecutar Vantrovia
+
+Se necesitan dos terminales abiertas dentro de la carpeta del proyecto.
+
+### Terminal 1 — Frontend
+
+```powershell
+npm run dev
+```
+
+### Terminal 2 — Laravel
+
+```powershell
+php artisan serve
+```
+
+Abrir en el navegador:
+
+```text
+http://127.0.0.1:8000
+```
+
+## Las siguientes veces
+
+Una vez instalado y configurado, normalmente solo necesitas:
+
+**Terminal 1**
+
+```powershell
+npm run dev
+```
+
+**Terminal 2**
+
+```powershell
+php artisan serve
+```
+
+## Configuración de correo
+
+La recuperación de contraseña utiliza SMTP.
+
+Configurar las credenciales en `.env`, por ejemplo:
+
+```env
+MAIL_MAILER=smtp
+MAIL_SCHEME=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=TU_CORREO
+MAIL_PASSWORD="TU_PASSWORD_DE_APLICACION"
+MAIL_FROM_ADDRESS=TU_CORREO
+MAIL_FROM_NAME="Vantrovia"
+```
+
+Después:
+
+```powershell
+php artisan optimize:clear
+```
+
+Nunca subir `.env` ni contraseñas reales a GitHub.
+
+## Comandos útiles
+
+Ejecutar migraciones pendientes:
+
+```powershell
+php artisan migrate
+```
+
+Limpiar caché:
+
+```powershell
+php artisan optimize:clear
+```
+
+Ver rutas:
+
+```powershell
+php artisan route:list
+```
+
+Abrir Tinker:
+
+```powershell
+php artisan tinker
+```
+
+Recrear completamente la BD local:
+
+```powershell
+php artisan migrate:fresh --seed
+```
+
+> Este último comando elimina todos los datos locales.
+
+## Si PowerShell bloquea NPM
+
+Ejecutar una sola vez:
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+```
+
+Luego cerrar y volver a abrir PowerShell.

@@ -321,6 +321,37 @@ $homeUrl = route('business.select');
 
                 @endif
 
+                {{-- Configuración --}}
+                @if(
+                $currentUser->hasBusinessPermission(
+                $currentBusiness,
+                'business.view'
+                )
+                )
+
+                <li class="nav-item">
+
+                    <a
+                        href="{{ route(
+                            'businesses.settings.edit',
+                            $currentBusiness
+                        ) }}"
+                        class="nav-link {{ request()->routeIs('businesses.settings.*') ? 'active' : '' }}">
+
+                        <span class="nav-link-icon">
+                            <i class="ti ti-settings"></i>
+                        </span>
+
+                        <span class="nav-link-title">
+                            Configuración
+                        </span>
+
+                    </a>
+
+                </li>
+
+                @endif
+
 
                 {{-- Cambiar negocio --}}
                 <li class="nav-item mt-3">

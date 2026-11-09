@@ -435,6 +435,28 @@ Usuarios del negocio
                                             Editar usuario
                                         </a>
 
+                                        @if(
+                                        auth()->user()->hasBusinessPermission(
+                                        $business,
+                                        'users.branches'
+                                        )
+                                        )
+
+                                        <a
+                                            href="{{ route(
+                                            'businesses.users.branches.edit',
+                                            [
+                                                $business,
+                                                $user
+                                            ]
+                                        ) }}"
+                                            class="dropdown-item">
+                                            <i class="ti ti-building me-2"></i>
+                                            Sucursales asignadas
+                                        </a>
+
+                                        @endif
+
 
                                         <div class="dropdown-divider"></div>
 
