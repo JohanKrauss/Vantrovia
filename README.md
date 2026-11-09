@@ -1,6 +1,6 @@
 # Vantrovia
 
-Proyecto SaaS desarrollado con Laravel, Blade, Tabler y Vite.
+Proyecto SaaS desarrollado con Laravel, Blade, Tabler, Vite y PostgreSQL.
 
 ## Requisitos
 
@@ -11,6 +11,7 @@ Tener instalado:
 - Node.js
 - NPM
 - Git
+- PostgreSQL
 
 Comprobar:
 
@@ -20,6 +21,7 @@ composer --version
 node -v
 npm -v
 git --version
+psql --version
 ```
 
 ## Levantar el proyecto por primera vez
@@ -46,31 +48,52 @@ Copy-Item .env.example .env
 php artisan key:generate
 ```
 
-El archivo `.env` contiene la configuración local y no debe subirse a GitHub.
+El archivo `.env` contiene configuración privada y no debe subirse a GitHub.
 
-### 4. Crear la base de datos
+### 4. Crear la base de datos PostgreSQL
 
-Actualmente en desarrollo se utiliza SQLite.
-
-Verifica en `.env`:
-
-```env
-DB_CONNECTION=sqlite
-```
-
-Crea el archivo:
+Entrar a PostgreSQL:
 
 ```powershell
-New-Item database\database.sqlite -ItemType File -Force
+psql -U postgres
 ```
 
-Ejecuta migraciones y seeders:
+Crear usuario y base de datos:
+
+```sql
+CREATE USER vantrovia_user WITH PASSWORD 'TU_PASSWORD';
+
+CREATE DATABASE vantrovia
+    WITH OWNER = vantrovia_user
+    ENCODING = 'UTF8';
+
+GRANT ALL PRIVILEGES ON DATABASE vantrovia TO vantrovia_user;
+```
+
+Salir:
+
+```sql
+\q
+```
+
+Configurar `.env`:
+
+```env
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=vantrovia
+DB_USERNAME=vantrovia_user
+DB_PASSWORD=TU_PASSWORD
+```
+
+### 5. Crear las tablas
 
 ```powershell
 php artisan migrate --seed
 ```
 
-### 5. Limpiar caché
+### 6. Limpiar caché
 
 ```powershell
 php artisan optimize:clear
@@ -78,7 +101,7 @@ php artisan optimize:clear
 
 ## Ejecutar Vantrovia
 
-Se necesitan dos terminales abiertas dentro de la carpeta del proyecto.
+Se necesitan dos terminales abiertas dentro del proyecto.
 
 ### Terminal 1 — Frontend
 
@@ -92,7 +115,7 @@ npm run dev
 php artisan serve
 ```
 
-Abrir en el navegador:
+Abrir:
 
 ```text
 http://127.0.0.1:8000
@@ -100,7 +123,7 @@ http://127.0.0.1:8000
 
 ## Las siguientes veces
 
-Una vez instalado y configurado, normalmente solo necesitas:
+Normalmente solo necesitas:
 
 **Terminal 1**
 
@@ -118,7 +141,7 @@ php artisan serve
 
 La recuperación de contraseña utiliza SMTP.
 
-Configurar las credenciales en `.env`, por ejemplo:
+Configurar en `.env`:
 
 ```env
 MAIL_MAILER=smtp
@@ -171,7 +194,7 @@ Recrear completamente la BD local:
 php artisan migrate:fresh --seed
 ```
 
-> Este último comando elimina todos los datos locales.
+> Este comando elimina todos los datos de la base de datos configurada.
 
 ## Si PowerShell bloquea NPM
 
