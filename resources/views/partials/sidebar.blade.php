@@ -46,6 +46,29 @@ $homeUrl = route('business.select');
 
 @endphp
 
+@php
+
+$currentBranch = null;
+
+if (
+$currentBusiness &&
+session('current_branch_id')
+) {
+$currentBranch = $currentBusiness
+->branches()
+->where(
+'id',
+session('current_branch_id')
+)
+->where(
+'status',
+'active'
+)
+->first();
+}
+
+@endphp
+
 
 <aside class="navbar navbar-vertical navbar-expand-lg position-absolute">
 
@@ -344,6 +367,41 @@ $homeUrl = route('business.select');
 
                         <span class="nav-link-title">
                             Configuración
+                        </span>
+
+                    </a>
+
+                </li>
+
+                @endif
+
+                @if($currentBusiness)
+
+                <li class="nav-item">
+
+                    <a
+                        href="{{ route(
+                'business.branch.select',
+                $currentBusiness
+            ) }}"
+                        class="nav-link {{ request()->routeIs('business.branch.*') ? 'active' : '' }}">
+
+                        <span class="nav-link-icon">
+                            <i class="ti ti-building-store"></i>
+                        </span>
+
+                        <span class="nav-link-title">
+
+                            @if($currentBranch)
+
+                            {{ $currentBranch->name }}
+
+                            @else
+
+                            Seleccionar sucursal
+
+                            @endif
+
                         </span>
 
                     </a>

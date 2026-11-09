@@ -64,8 +64,12 @@ class BusinessContextController extends Controller
             $business->id
         );
 
+        $request->session()->forget(
+            'current_branch_id'
+        );
+
         return redirect()->route(
-            'business.dashboard',
+            'business.branch.select',
             $business
         );
     }

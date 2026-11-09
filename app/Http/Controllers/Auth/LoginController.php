@@ -82,7 +82,7 @@ class LoginController extends Controller
             );
 
             return redirect()->route(
-                'business.dashboard',
+                'business.branch.select',
                 $business
             );
         }

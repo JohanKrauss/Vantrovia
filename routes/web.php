@@ -17,6 +17,7 @@ use App\Http\Controllers\BusinessDashboardController;
 use App\Http\Controllers\BusinessBranchController;
 use App\Http\Controllers\BusinessSettingsController;
 use App\Http\Controllers\BusinessUserBranchController;
+use App\Http\Controllers\BranchContextController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -219,6 +220,19 @@ Route::middleware('auth')->group(function () {
         ->name(
             'businesses.users.branches.update'
         );
+
+    Route::get(
+        '/businesses/{business}/branch/select',
+        [BranchContextController::class, 'index']
+    )
+        ->name('business.branch.select');
+
+
+    Route::post(
+        '/businesses/{business}/branch/select',
+        [BranchContextController::class, 'switch']
+    )
+        ->name('business.branch.switch');
     /*
 -------------------ROLES-------------------
 */
