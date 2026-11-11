@@ -19,6 +19,7 @@ use App\Http\Controllers\BusinessSettingsController;
 use App\Http\Controllers\BusinessUserBranchController;
 use App\Http\Controllers\BranchContextController;
 use App\Http\Controllers\BusinessCategoryController;
+use App\Http\Controllers\BusinessUnitController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -293,6 +294,53 @@ Route::middleware('auth')->group(function () {
             'business.permission:categories.status'
         )
         ->name('businesses.categories.status');
+
+    Route::get(
+        '/businesses/{business}/units',
+        [BusinessUnitController::class, 'index']
+    )
+        ->middleware('business.permission:units.view')
+        ->name('businesses.units.index');
+
+
+    Route::get(
+        '/businesses/{business}/units/create',
+        [BusinessUnitController::class, 'create']
+    )
+        ->middleware('business.permission:units.create')
+        ->name('businesses.units.create');
+
+
+    Route::post(
+        '/businesses/{business}/units',
+        [BusinessUnitController::class, 'store']
+    )
+        ->middleware('business.permission:units.create')
+        ->name('businesses.units.store');
+
+
+    Route::get(
+        '/businesses/{business}/units/{unit}/edit',
+        [BusinessUnitController::class, 'edit']
+    )
+        ->middleware('business.permission:units.update')
+        ->name('businesses.units.edit');
+
+
+    Route::put(
+        '/businesses/{business}/units/{unit}',
+        [BusinessUnitController::class, 'update']
+    )
+        ->middleware('business.permission:units.update')
+        ->name('businesses.units.update');
+
+
+    Route::patch(
+        '/businesses/{business}/units/{unit}/status',
+        [BusinessUnitController::class, 'updateStatus']
+    )
+        ->middleware('business.permission:units.status')
+        ->name('businesses.units.status');
     /*
 -------------------ROLES-------------------
 */

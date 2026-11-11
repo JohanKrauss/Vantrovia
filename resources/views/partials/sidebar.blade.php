@@ -353,9 +353,9 @@ session('current_branch_id')
 
                     <a
                         href="{{ route(
-                'businesses.categories.index',
-                $currentBusiness
-            ) }}"
+                            'businesses.categories.index',
+                            $currentBusiness
+                        ) }}"
                         class="nav-link {{ request()->routeIs('businesses.categories.*') ? 'active' : '' }}">
 
                         <span class="nav-link-icon">
@@ -364,6 +364,36 @@ session('current_branch_id')
 
                         <span class="nav-link-title">
                             Categorías
+                        </span>
+
+                    </a>
+
+                </li>
+
+                @endif
+
+                @if(
+                $currentUser->hasBusinessPermission(
+                $currentBusiness,
+                'units.view'
+                )
+                )
+
+                <li class="nav-item">
+
+                    <a
+                        href="{{ route(
+                            'businesses.units.index',
+                            $currentBusiness
+                        ) }}"
+                        class="nav-link {{ request()->routeIs('businesses.units.*') ? 'active' : '' }}">
+
+                        <span class="nav-link-icon">
+                            <i class="ti ti-ruler"></i>
+                        </span>
+
+                        <span class="nav-link-title">
+                            Unidades
                         </span>
 
                     </a>
@@ -411,9 +441,9 @@ session('current_branch_id')
 
                     <a
                         href="{{ route(
-                'business.branch.select',
-                $currentBusiness
-            ) }}"
+                            'business.branch.select',
+                            $currentBusiness
+                        ) }}"
                         class="nav-link {{ request()->routeIs('business.branch.*') ? 'active' : '' }}">
 
                         <span class="nav-link-icon">
