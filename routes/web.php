@@ -18,6 +18,7 @@ use App\Http\Controllers\BusinessBranchController;
 use App\Http\Controllers\BusinessSettingsController;
 use App\Http\Controllers\BusinessUserBranchController;
 use App\Http\Controllers\BranchContextController;
+use App\Http\Controllers\BusinessCategoryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -233,6 +234,65 @@ Route::middleware('auth')->group(function () {
         [BranchContextController::class, 'switch']
     )
         ->name('business.branch.switch');
+
+    Route::get(
+        '/businesses/{business}/categories',
+        [BusinessCategoryController::class, 'index']
+    )
+        ->middleware(
+            'business.permission:categories.view'
+        )
+        ->name('businesses.categories.index');
+
+
+    Route::get(
+        '/businesses/{business}/categories/create',
+        [BusinessCategoryController::class, 'create']
+    )
+        ->middleware(
+            'business.permission:categories.create'
+        )
+        ->name('businesses.categories.create');
+
+
+    Route::post(
+        '/businesses/{business}/categories',
+        [BusinessCategoryController::class, 'store']
+    )
+        ->middleware(
+            'business.permission:categories.create'
+        )
+        ->name('businesses.categories.store');
+
+
+    Route::get(
+        '/businesses/{business}/categories/{category}/edit',
+        [BusinessCategoryController::class, 'edit']
+    )
+        ->middleware(
+            'business.permission:categories.update'
+        )
+        ->name('businesses.categories.edit');
+
+
+    Route::put(
+        '/businesses/{business}/categories/{category}',
+        [BusinessCategoryController::class, 'update']
+    )
+        ->middleware(
+            'business.permission:categories.update'
+        )
+        ->name('businesses.categories.update');
+
+
+    Route::patch(
+        '/businesses/{business}/categories/{category}/status',
+        [BusinessCategoryController::class, 'updateStatus']
+    )
+        ->middleware(
+            'business.permission:categories.status'
+        )
+        ->name('businesses.categories.status');
     /*
 -------------------ROLES-------------------
 */

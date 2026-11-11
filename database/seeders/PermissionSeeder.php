@@ -111,6 +111,58 @@ class PermissionSeeder extends Seeder
                 'description' => 'Puede asignar roles a usuarios.',
             ],
 
+            // Categorías
+            [
+                'module' => 'categories',
+                'name' => 'Ver categorías',
+                'slug' => 'categories.view',
+                'description' => 'Puede consultar categorías de productos.',
+            ],
+            [
+                'module' => 'categories',
+                'name' => 'Crear categorías',
+                'slug' => 'categories.create',
+                'description' => 'Puede crear categorías de productos.',
+            ],
+            [
+                'module' => 'categories',
+                'name' => 'Editar categorías',
+                'slug' => 'categories.update',
+                'description' => 'Puede modificar categorías de productos.',
+            ],
+            [
+                'module' => 'categories',
+                'name' => 'Cambiar estado de categorías',
+                'slug' => 'categories.status',
+                'description' => 'Puede activar o desactivar categorías.',
+            ],
+
+            // Unidades
+            [
+                'module' => 'units',
+                'name' => 'Ver unidades',
+                'slug' => 'units.view',
+                'description' => 'Puede consultar unidades de medida.',
+            ],
+            [
+                'module' => 'units',
+                'name' => 'Crear unidades',
+                'slug' => 'units.create',
+                'description' => 'Puede crear unidades de medida.',
+            ],
+            [
+                'module' => 'units',
+                'name' => 'Editar unidades',
+                'slug' => 'units.update',
+                'description' => 'Puede modificar unidades de medida.',
+            ],
+            [
+                'module' => 'units',
+                'name' => 'Cambiar estado de unidades',
+                'slug' => 'units.status',
+                'description' => 'Puede activar o desactivar unidades de medida.',
+            ],
+
             // Negocio
             [
                 'module' => 'business',
