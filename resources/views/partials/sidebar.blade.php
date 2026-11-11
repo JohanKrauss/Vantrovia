@@ -345,6 +345,36 @@ session('current_branch_id')
                 @if(
                 $currentUser->hasBusinessPermission(
                 $currentBusiness,
+                'products.view'
+                )
+                )
+
+                <li class="nav-item">
+
+                    <a
+                        href="{{ route(
+                            'businesses.products.index',
+                            $currentBusiness
+                        ) }}"
+                        class="nav-link {{ request()->routeIs('businesses.products.*') ? 'active' : '' }}">
+
+                        <span class="nav-link-icon">
+                            <i class="ti ti-package"></i>
+                        </span>
+
+                        <span class="nav-link-title">
+                            Productos
+                        </span>
+
+                    </a>
+
+                </li>
+
+                @endif
+
+                @if(
+                $currentUser->hasBusinessPermission(
+                $currentBusiness,
                 'categories.view'
                 )
                 )

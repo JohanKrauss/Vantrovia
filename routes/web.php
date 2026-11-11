@@ -20,6 +20,7 @@ use App\Http\Controllers\BusinessUserBranchController;
 use App\Http\Controllers\BranchContextController;
 use App\Http\Controllers\BusinessCategoryController;
 use App\Http\Controllers\BusinessUnitController;
+use App\Http\Controllers\BusinessProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -341,6 +342,53 @@ Route::middleware('auth')->group(function () {
     )
         ->middleware('business.permission:units.status')
         ->name('businesses.units.status');
+
+    Route::get(
+        '/businesses/{business}/products',
+        [BusinessProductController::class, 'index']
+    )
+        ->middleware('business.permission:products.view')
+        ->name('businesses.products.index');
+
+
+    Route::get(
+        '/businesses/{business}/products/create',
+        [BusinessProductController::class, 'create']
+    )
+        ->middleware('business.permission:products.create')
+        ->name('businesses.products.create');
+
+
+    Route::post(
+        '/businesses/{business}/products',
+        [BusinessProductController::class, 'store']
+    )
+        ->middleware('business.permission:products.create')
+        ->name('businesses.products.store');
+
+
+    Route::get(
+        '/businesses/{business}/products/{product}/edit',
+        [BusinessProductController::class, 'edit']
+    )
+        ->middleware('business.permission:products.update')
+        ->name('businesses.products.edit');
+
+
+    Route::put(
+        '/businesses/{business}/products/{product}',
+        [BusinessProductController::class, 'update']
+    )
+        ->middleware('business.permission:products.update')
+        ->name('businesses.products.update');
+
+
+    Route::patch(
+        '/businesses/{business}/products/{product}/status',
+        [BusinessProductController::class, 'updateStatus']
+    )
+        ->middleware('business.permission:products.status')
+        ->name('businesses.products.status');
     /*
 -------------------ROLES-------------------
 */

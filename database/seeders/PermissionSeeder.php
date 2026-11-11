@@ -176,6 +176,32 @@ class PermissionSeeder extends Seeder
                 'slug' => 'business.update',
                 'description' => 'Puede modificar datos del negocio.',
             ],
+
+            // Productos
+            [
+                'module' => 'products',
+                'name' => 'Ver productos',
+                'slug' => 'products.view',
+                'description' => 'Puede consultar productos del negocio.',
+            ],
+            [
+                'module' => 'products',
+                'name' => 'Crear productos',
+                'slug' => 'products.create',
+                'description' => 'Puede crear productos.',
+            ],
+            [
+                'module' => 'products',
+                'name' => 'Editar productos',
+                'slug' => 'products.update',
+                'description' => 'Puede modificar productos.',
+            ],
+            [
+                'module' => 'products',
+                'name' => 'Cambiar estado de productos',
+                'slug' => 'products.status',
+                'description' => 'Puede activar o desactivar productos.',
+            ],
         ];
 
         $permissionIds = collect();
