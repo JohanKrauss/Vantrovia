@@ -21,6 +21,7 @@ use App\Http\Controllers\BranchContextController;
 use App\Http\Controllers\BusinessCategoryController;
 use App\Http\Controllers\BusinessUnitController;
 use App\Http\Controllers\BusinessProductController;
+use App\Http\Controllers\BusinessInventoryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -389,6 +390,55 @@ Route::middleware('auth')->group(function () {
     )
         ->middleware('business.permission:products.status')
         ->name('businesses.products.status');
+
+    Route::get(
+        '/businesses/{business}/inventory',
+        [BusinessInventoryController::class, 'index']
+    )
+        ->middleware(
+            'business.permission:inventory.view'
+        )
+        ->name('businesses.inventory.index');
+
+
+    Route::post(
+        '/businesses/{business}/inventory/{product}/adjust',
+        [BusinessInventoryController::class, 'adjust']
+    )
+        ->middleware(
+            'business.permission:inventory.adjust'
+        )
+        ->name('businesses.inventory.adjust');
+
+
+    Route::patch(
+        '/businesses/{business}/inventory/{product}/minimum-stock',
+        [
+            BusinessInventoryController::class,
+            'updateMinimumStock',
+        ]
+    )
+        ->middleware(
+            'business.permission:inventory.minimum-stock'
+        )
+        ->name(
+            'businesses.inventory.minimum-stock'
+        );
+
+
+    Route::get(
+        '/businesses/{business}/inventory/movements',
+        [
+            BusinessInventoryController::class,
+            'movements',
+        ]
+    )
+        ->middleware(
+            'business.permission:inventory.movements'
+        )
+        ->name(
+            'businesses.inventory.movements'
+        );
     /*
 -------------------ROLES-------------------
 */

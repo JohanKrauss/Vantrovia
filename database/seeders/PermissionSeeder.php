@@ -202,6 +202,32 @@ class PermissionSeeder extends Seeder
                 'slug' => 'products.status',
                 'description' => 'Puede activar o desactivar productos.',
             ],
+            
+            // Inventario
+            [
+                'module' => 'inventory',
+                'name' => 'Ver inventario',
+                'slug' => 'inventory.view',
+                'description' => 'Puede consultar el inventario de la sucursal.',
+            ],
+            [
+                'module' => 'inventory',
+                'name' => 'Ajustar inventario',
+                'slug' => 'inventory.adjust',
+                'description' => 'Puede realizar entradas y salidas manuales de inventario.',
+            ],
+            [
+                'module' => 'inventory',
+                'name' => 'Configurar stock mínimo',
+                'slug' => 'inventory.minimum-stock',
+                'description' => 'Puede configurar el stock mínimo de los productos.',
+            ],
+            [
+                'module' => 'inventory',
+                'name' => 'Ver movimientos de inventario',
+                'slug' => 'inventory.movements',
+                'description' => 'Puede consultar el historial de movimientos de inventario.',
+            ],
         ];
 
         $permissionIds = collect();
