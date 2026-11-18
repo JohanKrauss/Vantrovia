@@ -6,6 +6,7 @@ use App\Models\Branch;
 use App\Models\Business;
 use App\Models\BusinessUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Validation\Rule;
 
 class BranchContextController extends Controller
@@ -21,42 +22,14 @@ class BranchContextController extends Controller
 
         $user = $request->user();
 
-        if ($user->isPlatformAdmin()) {
-            $branches = $business
-                ->branches()
-                ->where('status', 'active')
-                ->orderByDesc('is_main')
-                ->orderBy('name')
-                ->get();
-        } else {
-            $membership = BusinessUser::query()
-                ->where('business_id', $business->id)
-                ->where('user_id', $user->id)
-                ->where('is_active', true)
-                ->firstOrFail();
-
-            $branches = $membership
-                ->branches()
-                ->where(
-                    'branches.business_id',
-                    $business->id
-                )
-                ->where(
-                    'branches.status',
-                    'active'
-                )
-                ->orderByDesc(
-                    'branches.is_main'
-                )
-                ->orderBy(
-                    'branches.name'
-                )
-                ->get();
-        }
+        $branches = $this->getAvailableBranches(
+            $business,
+            $user
+        );
 
         /*
-         * Si solamente tiene una sucursal disponible,
-         * no tiene sentido mostrar el selector.
+         * Si solo tiene una sucursal disponible,
+         * se selecciona automáticamente.
          */
         if ($branches->count() === 1) {
             $branch = $branches->first();
@@ -104,8 +77,7 @@ class BranchContextController extends Controller
                     'branches',
                     'id'
                 )->where(
-                    fn($query) =>
-                    $query
+                    fn($query) => $query
                         ->where(
                             'business_id',
                             $business->id
@@ -135,34 +107,37 @@ class BranchContextController extends Controller
 
         $user = $request->user();
 
+        /*
+         * Platform Admin puede entrar a cualquier
+         * sucursal activa.
+         */
         if (! $user->isPlatformAdmin()) {
-            $membership = BusinessUser::query()
-                ->where(
-                    'business_id',
-                    $business->id
-                )
-                ->where(
-                    'user_id',
-                    $user->id
-                )
-                ->where(
-                    'is_active',
-                    true
-                )
-                ->firstOrFail();
-
-            $hasAccess = $membership
-                ->branches()
-                ->where(
-                    'branches.id',
-                    $branch->id
-                )
-                ->exists();
-
-            abort_unless(
-                $hasAccess,
-                403
+            $membership = $this->getMembership(
+                $business,
+                $user->id
             );
+
+            /*
+             * El Administrador del negocio tiene
+             * acceso automático a todas sus sucursales.
+             */
+            $isBusinessAdmin =
+                $membership->role?->slug === 'administrator';
+
+            if (! $isBusinessAdmin) {
+                $hasAccess = $membership
+                    ->branches()
+                    ->where(
+                        'branches.id',
+                        $branch->id
+                    )
+                    ->exists();
+
+                abort_unless(
+                    $hasAccess,
+                    403
+                );
+            }
         }
 
         $request->session()->put(
@@ -184,5 +159,86 @@ class BranchContextController extends Controller
                 'success',
                 'Sucursal seleccionada correctamente.'
             );
+    }
+
+    private function getAvailableBranches(
+        Business $business,
+        $user
+    ): Collection {
+        /*
+         * Platform Admin:
+         * todas las sucursales activas.
+         */
+        if ($user->isPlatformAdmin()) {
+            return $business
+                ->branches()
+                ->where('status', 'active')
+                ->orderByDesc('is_main')
+                ->orderBy('name')
+                ->get();
+        }
+
+        $membership = $this->getMembership(
+            $business,
+            $user->id
+        );
+
+        /*
+         * Administrador del negocio:
+         * automáticamente todas las sucursales.
+         */
+        if (
+            $membership->role?->slug === 'administrator'
+        ) {
+            return $business
+                ->branches()
+                ->where('status', 'active')
+                ->orderByDesc('is_main')
+                ->orderBy('name')
+                ->get();
+        }
+
+        /*
+         * Otros roles:
+         * únicamente sucursales asignadas.
+         */
+        return $membership
+            ->branches()
+            ->where(
+                'branches.business_id',
+                $business->id
+            )
+            ->where(
+                'branches.status',
+                'active'
+            )
+            ->orderByDesc(
+                'branches.is_main'
+            )
+            ->orderBy(
+                'branches.name'
+            )
+            ->get();
+    }
+
+    private function getMembership(
+        Business $business,
+        int $userId
+    ): BusinessUser {
+        return BusinessUser::query()
+            ->with('role')
+            ->where(
+                'business_id',
+                $business->id
+            )
+            ->where(
+                'user_id',
+                $userId
+            )
+            ->where(
+                'is_active',
+                true
+            )
+            ->firstOrFail();
     }
 }

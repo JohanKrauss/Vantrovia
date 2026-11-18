@@ -13,6 +13,9 @@ $moduleLabels = [
 'users' => 'Usuarios',
 'branches' => 'Sucursales',
 'roles' => 'Roles y permisos',
+'categories' => 'Categorías',
+'units' => 'Unidades de medida',
+'products' => 'Productos',
 'business' => 'Negocio',
 ];
 @endphp

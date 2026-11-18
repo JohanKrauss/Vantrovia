@@ -342,6 +342,96 @@ session('current_branch_id')
 
                 </li>
 
+                @if(
+                $currentUser->hasBusinessPermission(
+                $currentBusiness,
+                'products.view'
+                )
+                )
+
+                <li class="nav-item">
+
+                    <a
+                        href="{{ route(
+                            'businesses.products.index',
+                            $currentBusiness
+                        ) }}"
+                        class="nav-link {{ request()->routeIs('businesses.products.*') ? 'active' : '' }}">
+
+                        <span class="nav-link-icon">
+                            <i class="ti ti-package"></i>
+                        </span>
+
+                        <span class="nav-link-title">
+                            Productos
+                        </span>
+
+                    </a>
+
+                </li>
+
+                @endif
+
+                @if(
+                $currentUser->hasBusinessPermission(
+                $currentBusiness,
+                'categories.view'
+                )
+                )
+
+                <li class="nav-item">
+
+                    <a
+                        href="{{ route(
+                            'businesses.categories.index',
+                            $currentBusiness
+                        ) }}"
+                        class="nav-link {{ request()->routeIs('businesses.categories.*') ? 'active' : '' }}">
+
+                        <span class="nav-link-icon">
+                            <i class="ti ti-category"></i>
+                        </span>
+
+                        <span class="nav-link-title">
+                            Categorías
+                        </span>
+
+                    </a>
+
+                </li>
+
+                @endif
+
+                @if(
+                $currentUser->hasBusinessPermission(
+                $currentBusiness,
+                'units.view'
+                )
+                )
+
+                <li class="nav-item">
+
+                    <a
+                        href="{{ route(
+                            'businesses.units.index',
+                            $currentBusiness
+                        ) }}"
+                        class="nav-link {{ request()->routeIs('businesses.units.*') ? 'active' : '' }}">
+
+                        <span class="nav-link-icon">
+                            <i class="ti ti-ruler"></i>
+                        </span>
+
+                        <span class="nav-link-title">
+                            Unidades
+                        </span>
+
+                    </a>
+
+                </li>
+
+                @endif
+
                 @endif
 
                 {{-- Configuración --}}
@@ -381,9 +471,9 @@ session('current_branch_id')
 
                     <a
                         href="{{ route(
-                'business.branch.select',
-                $currentBusiness
-            ) }}"
+                            'business.branch.select',
+                            $currentBusiness
+                        ) }}"
                         class="nav-link {{ request()->routeIs('business.branch.*') ? 'active' : '' }}">
 
                         <span class="nav-link-icon">
