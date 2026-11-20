@@ -202,7 +202,7 @@ class PermissionSeeder extends Seeder
                 'slug' => 'products.status',
                 'description' => 'Puede activar o desactivar productos.',
             ],
-            
+
             // Inventario
             [
                 'module' => 'inventory',
@@ -227,6 +227,20 @@ class PermissionSeeder extends Seeder
                 'name' => 'Ver movimientos de inventario',
                 'slug' => 'inventory.movements',
                 'description' => 'Puede consultar el historial de movimientos de inventario.',
+            ],
+
+            // Traspasos de inventario
+            [
+                'module' => 'inventory',
+                'name' => 'Ver traspasos',
+                'slug' => 'inventory.transfers.view',
+                'description' => 'Puede consultar los traspasos entre sucursales.',
+            ],
+            [
+                'module' => 'inventory',
+                'name' => 'Crear traspasos',
+                'slug' => 'inventory.transfers.create',
+                'description' => 'Puede transferir existencias entre sucursales.',
             ],
         ];
 

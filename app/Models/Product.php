@@ -51,4 +51,11 @@ class Product extends Model
             Inventory::class
         );
     }
+
+    public function inventoryTransferItems(): HasMany
+    {
+        return $this->hasMany(
+            InventoryTransferItem::class
+        );
+    }
 }

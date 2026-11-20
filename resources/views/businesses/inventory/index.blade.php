@@ -39,19 +39,45 @@ $business,
 
 @section('page-actions')
 
-@if($canMovements)
+<div class="d-flex gap-2">
 
-<a
-    href="{{ route(
-            'businesses.inventory.movements',
-            $business
-        ) }}"
-    class="btn btn-outline-secondary">
-    <i class="ti ti-history me-2"></i>
-    Movimientos
-</a>
+    @if($canMovements)
 
-@endif
+    <a
+        href="{{ route(
+                'businesses.inventory.movements',
+                $business
+            ) }}"
+        class="btn btn-outline-secondary">
+        <i class="ti ti-history me-2"></i>
+        Movimientos
+    </a>
+
+    @endif
+
+
+    @if(
+    auth()
+    ->user()
+    ->hasBusinessPermission(
+    $business,
+    'inventory.transfers.view'
+    )
+    )
+
+    <a
+        href="{{ route(
+                'businesses.inventory.transfers.index',
+                $business
+            ) }}"
+        class="btn btn-outline-primary">
+        <i class="ti ti-arrows-exchange me-2"></i>
+        Traspasos
+    </a>
+
+    @endif
+
+</div>
 
 @endsection
 

@@ -53,4 +53,20 @@ class Branch extends Model
             Inventory::class
         );
     }
+
+    public function outgoingInventoryTransfers(): HasMany
+    {
+        return $this->hasMany(
+            InventoryTransfer::class,
+            'source_branch_id'
+        );
+    }
+
+    public function incomingInventoryTransfers(): HasMany
+    {
+        return $this->hasMany(
+            InventoryTransfer::class,
+            'destination_branch_id'
+        );
+    }
 }
