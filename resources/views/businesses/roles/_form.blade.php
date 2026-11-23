@@ -17,6 +17,7 @@ $moduleLabels = [
 'units' => 'Unidades de medida',
 'products' => 'Productos',
 'business' => 'Negocio',
+'inventory' => 'Inventario',
 ];
 @endphp
 

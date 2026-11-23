@@ -54,4 +54,18 @@ class Business extends Model
     {
         return $this->hasMany(Product::class);
     }
+
+    public function inventories(): HasMany
+    {
+        return $this->hasMany(
+            Inventory::class
+        );
+    }
+
+    public function inventoryTransfers(): HasMany
+    {
+        return $this->hasMany(
+            InventoryTransfer::class
+        );
+    }
 }

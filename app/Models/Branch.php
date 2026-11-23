@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -44,5 +45,28 @@ class Branch extends Model
             'branch_id',
             'business_user_id'
         )->withTimestamps();
+    }
+
+    public function inventories(): HasMany
+    {
+        return $this->hasMany(
+            Inventory::class
+        );
+    }
+
+    public function outgoingInventoryTransfers(): HasMany
+    {
+        return $this->hasMany(
+            InventoryTransfer::class,
+            'source_branch_id'
+        );
+    }
+
+    public function incomingInventoryTransfers(): HasMany
+    {
+        return $this->hasMany(
+            InventoryTransfer::class,
+            'destination_branch_id'
+        );
     }
 }
