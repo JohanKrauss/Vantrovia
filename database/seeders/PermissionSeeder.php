@@ -242,6 +242,32 @@ class PermissionSeeder extends Seeder
                 'slug' => 'inventory.transfers.create',
                 'description' => 'Puede transferir existencias entre sucursales.',
             ],
+
+            // Proveedores
+            [
+                'module' => 'suppliers',
+                'name' => 'Ver proveedores',
+                'slug' => 'suppliers.view',
+                'description' => 'Puede consultar los proveedores del negocio.',
+            ],
+            [
+                'module' => 'suppliers',
+                'name' => 'Crear proveedores',
+                'slug' => 'suppliers.create',
+                'description' => 'Puede crear proveedores.',
+            ],
+            [
+                'module' => 'suppliers',
+                'name' => 'Editar proveedores',
+                'slug' => 'suppliers.update',
+                'description' => 'Puede modificar proveedores.',
+            ],
+            [
+                'module' => 'suppliers',
+                'name' => 'Cambiar estado de proveedores',
+                'slug' => 'suppliers.status',
+                'description' => 'Puede activar o desactivar proveedores.',
+            ],
         ];
 
         $permissionIds = collect();

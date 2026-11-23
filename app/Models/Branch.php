@@ -69,4 +69,11 @@ class Branch extends Model
             'destination_branch_id'
         );
     }
+
+    public function purchases(): HasMany
+    {
+        return $this->hasMany(
+            Purchase::class
+        );
+    }
 }

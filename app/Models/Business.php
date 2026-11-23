@@ -68,4 +68,18 @@ class Business extends Model
             InventoryTransfer::class
         );
     }
+
+    public function suppliers(): HasMany
+    {
+        return $this->hasMany(
+            Supplier::class
+        );
+    }
+
+    public function purchases(): HasMany
+    {
+        return $this->hasMany(
+            Purchase::class
+        );
+    }
 }

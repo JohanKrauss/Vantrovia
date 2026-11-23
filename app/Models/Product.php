@@ -58,4 +58,11 @@ class Product extends Model
             InventoryTransferItem::class
         );
     }
+
+    public function purchaseItems(): HasMany
+    {
+        return $this->hasMany(
+            PurchaseItem::class
+        );
+    }
 }

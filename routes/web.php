@@ -20,6 +20,7 @@ use App\Http\Controllers\BusinessUserBranchController;
 use App\Http\Controllers\BusinessUserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\BusinessSupplierController;
 use App\Models\Branch;
 use App\Models\Business;
 use App\Models\User;
@@ -476,6 +477,64 @@ Route::middleware('auth')->group(function () {
         ->middleware('business.permission:products.status')
         ->name('businesses.products.status');
 
+    Route::get(
+        '/businesses/{business}/suppliers',
+        [BusinessSupplierController::class, 'index']
+    )
+        ->middleware(
+            'business.permission:suppliers.view'
+        )
+        ->name('businesses.suppliers.index');
+
+
+    Route::get(
+        '/businesses/{business}/suppliers/create',
+        [BusinessSupplierController::class, 'create']
+    )
+        ->middleware(
+            'business.permission:suppliers.create'
+        )
+        ->name('businesses.suppliers.create');
+
+
+    Route::post(
+        '/businesses/{business}/suppliers',
+        [BusinessSupplierController::class, 'store']
+    )
+        ->middleware(
+            'business.permission:suppliers.create'
+        )
+        ->name('businesses.suppliers.store');
+
+
+    Route::get(
+        '/businesses/{business}/suppliers/{supplier}/edit',
+        [BusinessSupplierController::class, 'edit']
+    )
+        ->middleware(
+            'business.permission:suppliers.update'
+        )
+        ->name('businesses.suppliers.edit');
+
+
+    Route::put(
+        '/businesses/{business}/suppliers/{supplier}',
+        [BusinessSupplierController::class, 'update']
+    )
+        ->middleware(
+            'business.permission:suppliers.update'
+        )
+        ->name('businesses.suppliers.update');
+
+
+    Route::patch(
+        '/businesses/{business}/suppliers/{supplier}/status',
+        [BusinessSupplierController::class, 'updateStatus']
+    )
+        ->middleware(
+            'business.permission:suppliers.status'
+        )
+        ->name('businesses.suppliers.status');
     /*
     | Inventario
     */
