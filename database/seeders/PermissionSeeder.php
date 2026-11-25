@@ -268,6 +268,20 @@ class PermissionSeeder extends Seeder
                 'slug' => 'suppliers.status',
                 'description' => 'Puede activar o desactivar proveedores.',
             ],
+
+            // Compras
+            [
+                'module' => 'purchases',
+                'name' => 'Ver compras',
+                'slug' => 'purchases.view',
+                'description' => 'Puede consultar las compras del negocio.',
+            ],
+            [
+                'module' => 'purchases',
+                'name' => 'Registrar compras',
+                'slug' => 'purchases.create',
+                'description' => 'Puede registrar compras e ingresar existencias al inventario.',
+            ],
         ];
 
         $permissionIds = collect();

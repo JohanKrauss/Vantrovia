@@ -19,6 +19,7 @@ $moduleLabels = [
 'business' => 'Negocio',
 'inventory' => 'Inventario',
 'suppliers' => 'Proveedores',
+'purchases' => 'Compras',
 ];
 @endphp
 

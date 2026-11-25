@@ -435,6 +435,36 @@ session('current_branch_id')
                 @if(
                 $currentUser->hasBusinessPermission(
                 $currentBusiness,
+                'purchases.view'
+                )
+                )
+
+                <li class="nav-item">
+
+                    <a
+                        href="{{ route(
+                            'businesses.purchases.index',
+                            $currentBusiness
+                        ) }}"
+                        class="nav-link {{ request()->routeIs('businesses.purchases.*') ? 'active' : '' }}">
+
+                        <span class="nav-link-icon">
+                            <i class="ti ti-shopping-cart-plus"></i>
+                        </span>
+
+                        <span class="nav-link-title">
+                            Compras
+                        </span>
+
+                    </a>
+
+                </li>
+
+                @endif
+
+                @if(
+                $currentUser->hasBusinessPermission(
+                $currentBusiness,
                 'categories.view'
                 )
                 )
@@ -444,8 +474,8 @@ session('current_branch_id')
                     <a
                         href="{{ route(
                             'businesses.categories.index',
-                            $currentBusiness
-                        ) }}"
+                                $currentBusiness
+                            ) }}"
                         class="nav-link {{ request()->routeIs('businesses.categories.*') ? 'active' : '' }}">
 
                         <span class="nav-link-icon">

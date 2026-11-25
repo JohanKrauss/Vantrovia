@@ -21,6 +21,7 @@ use App\Http\Controllers\BusinessUserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BusinessSupplierController;
+use App\Http\Controllers\BusinessPurchaseController;
 use App\Models\Branch;
 use App\Models\Business;
 use App\Models\User;
@@ -477,6 +478,9 @@ Route::middleware('auth')->group(function () {
         ->middleware('business.permission:products.status')
         ->name('businesses.products.status');
 
+    /*
+    | Proveedores
+    */
     Route::get(
         '/businesses/{business}/suppliers',
         [BusinessSupplierController::class, 'index']
@@ -535,6 +539,49 @@ Route::middleware('auth')->group(function () {
             'business.permission:suppliers.status'
         )
         ->name('businesses.suppliers.status');
+
+    /*
+    | Compras
+    
+    */
+    Route::get(
+        '/businesses/{business}/purchases',
+        [BusinessPurchaseController::class, 'index']
+    )
+        ->middleware(
+            'business.permission:purchases.view'
+        )
+        ->name('businesses.purchases.index');
+
+
+    Route::get(
+        '/businesses/{business}/purchases/create',
+        [BusinessPurchaseController::class, 'create']
+    )
+        ->middleware(
+            'business.permission:purchases.create'
+        )
+        ->name('businesses.purchases.create');
+
+
+    Route::post(
+        '/businesses/{business}/purchases',
+        [BusinessPurchaseController::class, 'store']
+    )
+        ->middleware(
+            'business.permission:purchases.create'
+        )
+        ->name('businesses.purchases.store');
+
+
+    Route::get(
+        '/businesses/{business}/purchases/{purchase}',
+        [BusinessPurchaseController::class, 'show']
+    )
+        ->middleware(
+            'business.permission:purchases.view'
+        )
+        ->name('businesses.purchases.show');
     /*
     | Inventario
     */
